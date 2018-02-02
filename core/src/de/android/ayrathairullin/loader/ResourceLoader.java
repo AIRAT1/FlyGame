@@ -12,15 +12,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class ResourceLoader {
     private static TextureAtlas atlas;
-    public static Sprite logo, flyAndSpiders, background, grass, fly1, fly2, fly3, spider, webUp, webDown, playButtonUp, playButtonDown, ready, retry, gameOver, scoreboard, starOn, starOff, highScore;
+    public static Sprite logo, flyAndSpiders, background, grass, fly1, fly2, fly3,
+            spider, webUp,webDown, playButtonUp, playButtonDown, ready, retry, gameOver,
+            highScore, scoreboard, starOn, starOff;
     public static Animation flyAnimation;
     public static Sound dead, flap, coin, fall;
     public static Music fly;
     public static BitmapFont font, shadow, whiteFont;
 
-    public static void load() {
+    public static void load(){
+
         atlas = new TextureAtlas(Gdx.files.internal("texture/texture.pack"), true);
+
         logo = new Sprite(atlas.findRegion("logo"));
+        logo.flip(false, true);
         playButtonUp = new Sprite(atlas.findRegion("buttonOff"));
         playButtonDown = new Sprite(atlas.findRegion("buttonOn"));
         ready = new Sprite(atlas.findRegion("tapToFly"));
@@ -30,7 +35,7 @@ public class ResourceLoader {
         starOn = new Sprite(atlas.findRegion("starOn"));
         starOff = new Sprite(atlas.findRegion("starOff"));
         highScore = new Sprite(atlas.findRegion("highScore"));
-        flyAndSpiders = new Sprite(atlas.findRegion("flyAndSpiders"));
+        flyAndSpiders = new Sprite(atlas.findRegion("flyAndSpyders"));
         background = new Sprite(atlas.findRegion("background"));
         grass = new Sprite(atlas.findRegion("grass"));
         fly1 = new Sprite(atlas.findRegion("fly1"));
@@ -56,14 +61,16 @@ public class ResourceLoader {
         whiteFont.getData().setScale(.1f, -.1f);
         shadow = new BitmapFont(Gdx.files.internal("fonts/shadow.fnt"));
         shadow.getData().setScale(.25f, -.25f);
-    }
 
-    public static void dispose() {
+    }
+    public static void dispose(){
         atlas.dispose();
+
         dead.dispose();
         flap.dispose();
         coin.dispose();
         fly.dispose();
+
         font.dispose();
         shadow.dispose();
     }
