@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import de.android.ayrathairullin.loader.ResourceLoader;
 import de.android.ayrathairullin.objects.Fly;
+import de.android.ayrathairullin.objects.Grass;
+import de.android.ayrathairullin.objects.MoveHandler;
+import de.android.ayrathairullin.objects.Web;
 
 public class GameRender {
     private int midPointY;
@@ -23,6 +26,9 @@ public class GameRender {
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
     private Fly fly;
+    private MoveHandler moveHandler;
+    private Grass frontGrass, backGrass;
+    private Web web1, web2, web3;
     private Sprite background, grass, flyMid, spider, webUp, webDown, ready, flyLogo, gameOver,
             highScore, scoreboard, starOn, starOff, retry;
     private Animation flyAnimation;
@@ -61,6 +67,9 @@ public class GameRender {
         batch.draw(background, 0, midPointY + 23, 136, 43);
         batch.enableBlending();
         drawFly(runTime);
+        drawGrass();
+        drawWebs();
+        drawSpiders();
         batch.end();
     }
 
@@ -85,6 +94,12 @@ public class GameRender {
 
     private void initGameObjects() {
         fly = world.getFly();
+        moveHandler = world.getMoveHandler();
+        frontGrass = moveHandler.getFrontGrass();
+        backGrass = moveHandler.getBackGrass();
+        web1 = moveHandler.getWeb1();
+        web2 = moveHandler.getWeb2();
+        web3 = moveHandler.getWeb3();
     }
 
     private void drawFly(float runTime) {
@@ -95,5 +110,30 @@ public class GameRender {
             batch.draw((TextureRegion) flyAnimation.getKeyFrame(runTime), fly.getX(), fly.getY(), fly.getWidth() / 2f,
                     fly.getHeight() / 2f, fly.getWidth(), fly.getHeight(), 1, 1, fly.getRotation());
         }
+    }
+
+    private void drawGrass() {
+        batch.draw(grass, frontGrass.getX(), frontGrass.getY(), frontGrass.getWidth(), frontGrass.getHeight());
+        batch.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
+    }
+
+    private void drawWebs() {
+        batch.draw(webUp, web1.getX(), web1.getY(), web1.getWidth(),web1.getHeight());
+        batch.draw(webDown, web1.getX(), web1.getY() + web1.getHeight() + 45, web1.getWidth(),
+                midPointY + 66 - (web1.getHeight() + 45));
+
+        batch.draw(webUp, web2.getX(), web2.getY(), web2.getWidth(),web2.getHeight());
+        batch.draw(webDown, web2.getX(), web2.getY() + web2.getHeight() + 45, web2.getWidth(),
+                midPointY + 66 - (web2.getHeight() + 45));
+
+        batch.draw(webUp, web3.getX(), web3.getY(), web3.getWidth(),web3.getHeight());
+        batch.draw(webDown, web3.getX(), web3.getY() + web3.getHeight() + 45, web3.getWidth(),
+                midPointY + 66 - (web3.getHeight() + 45));
+    }
+
+    private void drawSpiders() {
+        batch.draw(spider, web1.getX() - 1, web1.getY() + web1.getHeight() - 14, 24, 14);
+        batch.draw(spider, web2.getX() - 1, web2.getY() + web2.getHeight() - 14, 24, 14);
+        batch.draw(spider, web3.getX() - 1, web3.getY() + web3.getHeight() - 14, 24, 14);
     }
 }
