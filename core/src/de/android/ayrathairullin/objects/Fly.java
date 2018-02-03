@@ -1,12 +1,18 @@
 package de.android.ayrathairullin.objects;
 
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+
+import de.android.ayrathairullin.loader.ResourceLoader;
 
 public class Fly {
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
+
+    private Circle circle;
+    private boolean isAlive;
 
     private float rotation;
     private int width;
@@ -15,6 +21,9 @@ public class Fly {
     public Fly(float x, float y, int width, int height){
         this.width = width;
         this.height = height;
+
+        circle = new Circle();
+        isAlive = true;
 
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
@@ -26,11 +35,14 @@ public class Fly {
     }
 
     public boolean notFlap() {
-        return velocity.y > 70;
+        return velocity.y > 70 || !isAlive;
     }
 
     public void onClick(){
-        velocity.y = -140;
+        if (isAlive) {
+            velocity.y = -140;
+            ResourceLoader.flap.play();
+        }
     }
 
     public void update(float delta){
@@ -39,7 +51,14 @@ public class Fly {
         if (velocity.y > 200){
             velocity.y = 200;
         }
+
+        if (position.y < - 13) {
+            position.y = - 13;
+            velocity.y = 0;
+        }
+
         position.add(velocity.cpy().scl(delta));
+        circle.set(position.x + 9, position.y + 6, 6.5f);
 
         if (velocity.y < 0) {
             rotation -= 600 * delta;
@@ -54,6 +73,15 @@ public class Fly {
                 rotation = 90;
             }
         }
+    }
+
+    public void die() {
+        isAlive = false;
+        velocity.y = 0;
+    }
+
+    public void cling() {
+        acceleration.y = 0;
     }
 
     public float getX(){
@@ -74,5 +102,13 @@ public class Fly {
 
     public float getHeight() {
         return height;
+    }
+
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 }

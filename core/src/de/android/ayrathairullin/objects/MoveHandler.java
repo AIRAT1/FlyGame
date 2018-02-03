@@ -61,4 +61,18 @@ public class MoveHandler {
     public Web getWeb3() {
         return web3;
     }
+
+    public void stop() {
+        frontGrass.stop();
+        backGrass.stop();
+        web1.stop();
+        web2.stop();
+        web3.stop();
+    }
+
+    public boolean collides(Fly fly) {
+        return web1.collides(fly) ||
+                web2.collides(fly) ||
+                web3.collides(fly);
+    }
 }
