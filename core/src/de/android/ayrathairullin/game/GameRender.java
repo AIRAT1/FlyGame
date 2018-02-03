@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.util.List;
+
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
@@ -22,6 +24,8 @@ import de.android.ayrathairullin.objects.MoveHandler;
 import de.android.ayrathairullin.objects.Web;
 import de.android.ayrathairullin.tools.Value;
 import de.android.ayrathairullin.tools.ValueAccessor;
+import de.android.ayrathairullin.ui.InputHandler;
+import de.android.ayrathairullin.ui.PlayButton;
 
 public class GameRender {
     private int midPointY;
@@ -43,11 +47,13 @@ public class GameRender {
     private TweenManager manager;
     private Value alpha = new Value();
     private Color transitionColor;
+    private List<PlayButton> menuButtons;
 
     public GameRender(GameWorld world, int gameHeight, int midPointY, int midPointX) {
         this.world = world;
         this.midPointX = midPointX;
         this.midPointY = midPointY;
+        this.menuButtons = ((InputHandler)Gdx.input.getInputProcessor()).getMenuButtons();
         camera = new OrthographicCamera();
         camera.setToOrtho(true, 136, gameHeight);
         batch = new SpriteBatch();
@@ -79,13 +85,41 @@ public class GameRender {
         batch.disableBlending();
         batch.draw(background, 0, midPointY + 23, 136, 43);
         batch.enableBlending();
-        drawFly(runTime);
+
         drawGrass();
         drawWebs();
         drawSpiders();
-        batch.end();
 
+        if (world.isRunning()) {
+            drawFly(runTime);
+            drawScore();
+        }else if (world.isReady()) {
+            drawFly(runTime);
+            drawReady();
+        }else if(world.isMenu()) {
+            drawFlyCentered(runTime);
+            drawMenuUI();
+        }else if (world.isGameOver()) {
+            drawScoreboard();
+            drawFly(runTime);
+            drawGameOver();
+            drawRetry();
+        }else if (world.isHighScore()) {
+            drawScoreboard();
+            drawFly(runTime);
+            drawHighScore();
+            drawRetry();
+        }
+
+        batch.end();
         drawTransition(delta);
+
+        if (fly.isAlive()) {
+            music.play();
+            music.isLooping();
+        }else {
+            music.stop();
+        }
     }
 
     private void initAssets() {
@@ -172,5 +206,74 @@ public class GameRender {
             shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+    }
+
+    private void drawMenuUI() {
+        batch.draw(flyLogo, midPointX - 48, midPointY - 50, 96, 14);
+        for (PlayButton button : menuButtons) {
+            button.draw(batch);
+        }
+    }
+
+    private void drawScoreboard() {
+        batch.draw(scoreboard, 22, midPointY - 30, 97, 37);
+        batch.draw(starOff, 25, midPointY - 15, 10, 10);
+        batch.draw(starOff, 37, midPointY - 15, 10, 10);
+        batch.draw(starOff, 49, midPointY - 15, 10, 10);
+        batch.draw(starOff, 61, midPointY - 15, 10, 10);
+        batch.draw(starOff, 73, midPointY - 15, 10, 10);
+
+        if (world.getScore() > 2) {
+            batch.draw(starOn, 73, midPointY - 15, 10, 10);
+        }
+        if (world.getScore() > 17) {
+            batch.draw(starOn, 61, midPointY - 15, 10, 10);
+        }
+        if (world.getScore() > 50) {
+            batch.draw(starOn, 49, midPointY - 15, 10, 10);
+        }
+        if (world.getScore() > 80) {
+            batch.draw(starOn, 37, midPointY - 15, 10, 10);
+        }
+        if (world.getScore() > 120) {
+            batch.draw(starOn, 25, midPointY - 15, 10, 10);
+        }
+
+        int length = ("" + world.getScore()).length();
+        ResourceLoader.whiteFont.draw(batch, "" + world.getScore(), 104 - (2 * length), midPointY - 20);
+        int length2 = ("" + ResourceLoader.getHighScore()).length();
+        ResourceLoader.whiteFont.draw(batch, "" + ResourceLoader.getHighScore(), 104 - (2.5f * length2), midPointY - 3);
+    }
+
+    private void drawRetry() {
+        batch.draw(retry, 36, midPointY + 10, 66, 14);
+    }
+
+    private void drawReady() {
+        batch.draw(ready, 36, midPointY - 50, 68, 14);
+    }
+
+    private void drawGameOver() {
+        int length = ("" + world.getScore()).length();
+        ResourceLoader.shadow.draw(batch, "" + world.getScore(), 68 - (3 * length), midPointY - 82);
+        ResourceLoader.font.draw(batch, "" + world.getScore(), 68 - (3 * length), midPointY - 83);
+    }
+
+    private void drawScore() {
+        int length = ("" + world.getScore()).length();
+        ResourceLoader.shadow.draw(batch, "" + world.getScore(),
+                68 - (3 * length), midPointY - 82);
+        ResourceLoader.font.draw(batch, "" + world.getScore(),
+                68 - (3 * length), midPointY - 83);
+    }
+
+    private void drawHighScore() {
+        batch.draw(highScore, 22, midPointY - 50, 96, 14);
+    }
+
+    private void drawFlyCentered(float runTime) {
+        batch.draw((TextureRegion) flyAnimation.getKeyFrame(runTime), 59, fly.getY() - 15,
+                fly.getWidth() / 2f, fly.getHeight() / 2f,
+                fly.getWidth(), fly.getHeight(), 1, 1, fly.getRotation());
     }
 }

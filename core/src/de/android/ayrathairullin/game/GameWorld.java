@@ -56,6 +56,10 @@ public class GameWorld {
     }
 
     public void updateRunning(float delta) {
+        if (delta > .15f) {
+            delta = .15f;
+        }
+
         fly.update(delta);
         moveHandler.update(delta);
 
@@ -75,6 +79,12 @@ public class GameWorld {
             }
             moveHandler.stop();
             fly.cling();
+            currentState = GameState.GAMEOVER;
+
+            if (score > ResourceLoader.getHighScore()) {
+                ResourceLoader.setHighScore(score);
+                currentState = GameState.HIGHSCORE;
+            }
         }
     }
 
@@ -132,5 +142,13 @@ public class GameWorld {
 
     public boolean isRunning() {
         return currentState == GameState.RUNNING;
+    }
+
+    public int getMidPointY() {
+        return midPointY;
+    }
+
+    public int getMidPointX() {
+        return midPointX;
     }
 }

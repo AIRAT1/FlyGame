@@ -65,9 +65,9 @@ public class ResourceLoader {
         shadow.getData().setScale(.25f, -.25f);
 
         preferences = Gdx.app.getPreferences("FlyGame");
+
         if (!preferences.contains("highScore")) {
             preferences.putInteger("highScore", 0);
-            preferences.flush();
         }
     }
 

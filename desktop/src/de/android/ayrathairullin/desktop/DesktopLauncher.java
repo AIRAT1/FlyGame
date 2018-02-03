@@ -7,7 +7,7 @@ import de.android.ayrathairullin.FlyGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Fly GAme";
+		config.title = "Fly Game";
 		config.width = 360;
 		config.height = 640;
 		new LwjglApplication(new FlyGame(), config);
