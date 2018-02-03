@@ -17,10 +17,12 @@ public class Fly {
     private float rotation;
     private int width;
     private float height;
+    private float originalY;
 
     public Fly(float x, float y, int width, int height){
         this.width = width;
         this.height = height;
+        this.originalY = y;
 
         circle = new Circle();
         isAlive = true;
@@ -110,5 +112,19 @@ public class Fly {
 
     public boolean isAlive() {
         return isAlive;
+    }
+
+    public void onRestart(int y) {
+        rotation = 0;
+        position.y = y;
+        velocity.x = 0;
+        velocity.y = 0;
+        acceleration.x = 0;
+        acceleration.y = 460;
+        isAlive = true;
+    }
+
+    public void updateReady(float runTime) {
+        position.y = 2 * (float)Math.sin(7 * runTime) + originalY;
     }
 }
