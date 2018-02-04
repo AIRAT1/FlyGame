@@ -73,19 +73,24 @@ public class GameRender {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
         shapeRenderer.setColor(186 / 255.0f, 224 / 255.0f, 213 / 255.0f, 1);
         shapeRenderer.rect(0, 0, 136, midPointY + 66);
+
         shapeRenderer.setColor(167 / 255.0f, 211 / 255.0f, 152 / 255.0f, 1);
         shapeRenderer.rect(0, midPointY + 66, 136, 11);
+
         shapeRenderer.setColor(75 / 255.0f, 136 / 255.0f, 178 / 255.0f, 1);
         shapeRenderer.rect(0, midPointY + 77, 136, 53);
+
         shapeRenderer.end();
 
         batch.begin();
         batch.disableBlending();
-        batch.draw(background, 0, midPointY + 23, 136, 43);
-        batch.enableBlending();
 
+        batch.draw(background, 0, midPointY + 23, 136, 43);
+
+        batch.enableBlending();
         drawGrass();
         drawWebs();
         drawSpiders();
@@ -93,18 +98,18 @@ public class GameRender {
         if (world.isRunning()) {
             drawFly(runTime);
             drawScore();
-        }else if (world.isReady()) {
+        } else if (world.isReady()) {
             drawFly(runTime);
             drawReady();
-        }else if(world.isMenu()) {
+        } else if (world.isMenu()) {
             drawFlyCentered(runTime);
             drawMenuUI();
-        }else if (world.isGameOver()) {
+        } else if (world.isGameOver()) {
             drawScoreboard();
             drawFly(runTime);
             drawGameOver();
             drawRetry();
-        }else if (world.isHighScore()) {
+        } else if (world.isHighScore()) {
             drawScoreboard();
             drawFly(runTime);
             drawHighScore();
@@ -114,10 +119,10 @@ public class GameRender {
         batch.end();
         drawTransition(delta);
 
-        if (fly.isAlive()) {
+        if (fly.isAlive()){
             music.play();
             music.isLooping();
-        }else {
+        } else {
             music.stop();
         }
     }

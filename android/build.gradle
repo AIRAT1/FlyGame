@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "de.android.ayrathairullin"
+        applicationId "de.android.ayrathairullin.fly"
         minSdkVersion 9
         targetSdkVersion 27
         versionCode 1
