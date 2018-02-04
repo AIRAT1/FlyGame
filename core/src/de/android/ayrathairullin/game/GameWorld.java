@@ -89,8 +89,8 @@ public class GameWorld {
     private void highScore() {
         if (score > ResourceLoader.getHighScore()) {
             ResourceLoader.setHighScore(score);
-            currentState = GameState.HIGHSCORE;
         }
+        currentState = GameState.HIGHSCORE;
     }
 
     public MoveHandler getMoveHandler() {
