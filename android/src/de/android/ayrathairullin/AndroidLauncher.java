@@ -29,9 +29,12 @@ public class AndroidLauncher extends AndroidApplication {
 
 		adView = new AdView(this);
 		adView.setAdSize(AdSize.BANNER);
-		adView.setAdUnitId("ca-app-pub-6708703349449969/2269017840");
+		adView.setAdUnitId(getString(R.string.ad_unit_id));
 
-		AdRequest.Builder builder = new AdRequest.Builder();
+		AdRequest adRequest = new AdRequest.Builder()
+				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+				.addTestDevice(getString(R.string.test_device_id))
+				.build();
 
 		RelativeLayout.LayoutParams adParams = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -39,7 +42,7 @@ public class AndroidLauncher extends AndroidApplication {
 		adParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		adParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
 		layout.addView(adView, adParams);
-		adView.loadAd(builder.build());
+		adView.loadAd(adRequest);
 
 		setContentView(layout);
 	}
